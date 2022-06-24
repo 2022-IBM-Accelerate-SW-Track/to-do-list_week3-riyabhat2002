@@ -18,9 +18,9 @@ import {
 const Todos = ({ todos, deleteTodo }) => {
   const todoList = todos.length ? (
     todos.map((todo) => {
-      let color = 'white';
+      let color = '#ffffff';
       if (new Date() > new Date(todo.due)) {
-        color = 'red';
+        color = '#ff7a70';
       }
       return (
         <Grid key={todo.id}>
