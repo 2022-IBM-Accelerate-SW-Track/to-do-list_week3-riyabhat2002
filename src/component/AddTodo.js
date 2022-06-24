@@ -1,13 +1,16 @@
-import React, { Component } from "react";
-import { Button, TextField } from "@mui/material";
+import React, { Component } from 'react';
+import { Button, TextField } from '@mui/material';
+import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 class AddTodo extends Component {
   // Create a local react state of the this component with both content date property set to nothing.
   constructor() {
     super();
     this.state = {
-      content: "",
-      date: ""
+      content: '',
+      date: '',
+      due: null,
     };
   }
   // The handleChange function updates the react state with the new input value provided from the user and the current date/time.
@@ -16,7 +19,13 @@ class AddTodo extends Component {
   handleChange = (event) => {
     this.setState({
       content: event.target.value,
-      date: Date().toLocaleString('en-US')
+      date: Date().toLocaleString('en-US'),
+    });
+  };
+
+  handleDateChange = (event) => {
+    this.setState({
+      due: new Date(event).toLocaleDateString(),
     });
   };
   // The handleSubmit function collects the forms input and puts it into the react state.
@@ -28,8 +37,9 @@ class AddTodo extends Component {
     if (this.state.content.trim()) {
       this.props.addTodo(this.state);
       this.setState({
-        content: "",
-        date: ""
+        content: '',
+        date: '',
+        due: null,
       });
     }
   };
@@ -48,12 +58,23 @@ class AddTodo extends Component {
           variant="outlined"
           onChange={this.handleChange}
           value={this.state.content}
+          data-testid="new-item-input"
         />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DesktopDatePicker
+            id="new-item-date"
+            label="Due Date"
+            value={this.state.due}
+            onChange={this.handleDateChange}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
         <Button
-          style={{ marginLeft: "10px" }}
+          style={{ marginLeft: '10px' }}
           onClick={this.handleSubmit}
           variant="contained"
           color="primary"
+          data-testid="new-item-button"
         >
           Add
         </Button>
